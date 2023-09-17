@@ -1,49 +1,27 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:movie_db/constrains.dart';
-import 'package:movie_db/resources/blocs/movie_bloc/bloc/movie_bloc.dart';
-import 'package:movie_db/resources/blocs/movie_bloc/bloc/movie_state.dart';
 import 'package:movie_db/resources/model/movie_model.dart';
+import 'package:video_player/video_player.dart';
 
 class MovieScreen extends StatelessWidget {
-  MovieScreen({
+  const MovieScreen({
     Key? key,
+    required this.movie,
   }) : super(key: key);
-  final MovieBloc _movieBloc = MovieBloc();
+
+  final Movie movie;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (_) => _movieBloc,
-        child: BlocListener<MovieBloc, MovieState>(
-          listener: (context, state) {
-            print(state);
-            if (state is SelectedMovieError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message!),
-                ),
-              );
-            }
-          },
-          child: BlocBuilder<MovieBloc, MovieState>(builder: (context, state) {
-            if (state is SelectedMovieState) {
-              return Stack(
-                children: [
-                  ..._buildBackground(context, state.movie),
-                  _buildMovieInformation(context, state.movie),
-                  _buildActions(context),
-                ],
-              );
-            } else {
-              print(state);
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
-        ),
+      body: Stack(
+        children: [
+          ..._buildBackground(context, movie),
+          _buildMovieInformation(context, movie),
+          _buildActions(context),
+        ],
       ),
     );
   }
@@ -106,6 +84,7 @@ class MovieScreen extends StatelessWidget {
                 fontSize: 14,
               ),
             ),
+           
             const SizedBox(height: 10),
             RatingBar.builder(
               initialRating: 3.5,

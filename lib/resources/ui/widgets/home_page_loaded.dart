@@ -43,13 +43,8 @@ Widget movieLoadedScreen(
                 InkWell(
                   onTap: () {
                     movieBloc.add(SelectMovieEvent(movie));
-                    Navigator.pushNamed(context, 'movies');
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => MovieScreen(movie: movie),
-                    //   ),
-                    // );
+                    Navigator.pushNamed(context, 'movies',arguments: movie);
+                   
                   },
                   child: MovieListItem(
                     imageUrl: movie.posterPath,
